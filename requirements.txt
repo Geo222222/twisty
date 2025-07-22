@@ -1,0 +1,61 @@
+# Core Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Database
+sqlalchemy==2.0.23
+alembic==1.13.1
+sqlite3  # Built-in with Python
+
+# HTTP Client
+httpx==0.25.2
+requests==2.31.0
+
+# Telephony & Voice
+twilio==8.10.3
+elevenlabs==0.2.26
+
+# Scheduling
+apscheduler==3.10.4
+
+# Email & Reporting
+jinja2==3.1.2
+smtplib  # Built-in with Python
+pandas==2.1.4
+openpyxl==3.1.2
+
+# Configuration & Environment
+python-dotenv==1.0.0
+pyyaml==6.0.1
+
+# Logging & Monitoring
+structlog==23.2.0
+rich==13.7.0
+
+# Security
+cryptography==41.0.8
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.3.0
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+httpx==0.25.2  # For testing FastAPI
+factory-boy==3.3.0
+
+# Development
+black==23.11.0
+isort==5.12.0
+flake8==6.1.0
+mypy==1.7.1
+
+# Optional: Production deployment
+gunicorn==21.2.0
+docker==6.1.3
+
+# Optional: Web Dashboard
+streamlit==1.28.2
+plotly==5.17.0

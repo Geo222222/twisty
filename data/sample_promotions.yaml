@@ -1,0 +1,158 @@
+# Sample Promotions for TwistyVoice
+# This file contains example promotions that can be loaded into the system
+
+promotions:
+  - name: "New Customer Special"
+    description: "20% off your first visit to GetTwisted Hair Studios"
+    discount_percentage: 20
+    target_customer_segments:
+      - "new_customer"
+    min_days_since_visit: null
+    max_days_since_visit: null
+    start_date: "2024-01-01"
+    end_date: "2024-12-31"
+    max_uses: 100
+    is_active: true
+
+  - name: "Welcome Back Offer"
+    description: "We miss you! Come back and get $25 off any service over $75"
+    discount_amount: 25
+    target_customer_segments:
+      - "lapsed_customer"
+    min_days_since_visit: 90
+    max_days_since_visit: 365
+    target_services:
+      - "braids"
+      - "color"
+      - "styling"
+    start_date: "2024-01-01"
+    end_date: "2024-12-31"
+    max_uses: 50
+    is_active: true
+
+  - name: "Braid Lovers Special"
+    description: "15% off all braiding services this month"
+    discount_percentage: 15
+    target_customer_segments:
+      - "service_specific"
+      - "regular_customer"
+    target_services:
+      - "braids"
+    min_days_since_visit: 30
+    max_days_since_visit: 180
+    start_date: "2024-01-01"
+    end_date: "2024-12-31"
+    max_uses: 75
+    is_active: true
+
+  - name: "VIP Exclusive"
+    description: "Exclusive 30% off for our VIP customers - you deserve the best!"
+    discount_percentage: 30
+    target_customer_segments:
+      - "vip_customer"
+    min_days_since_visit: 14
+    max_days_since_visit: 90
+    start_date: "2024-01-01"
+    end_date: "2024-12-31"
+    max_uses: 25
+    is_active: true
+
+  - name: "Budget Friendly Special"
+    description: "$15 off any service - great value for amazing hair!"
+    discount_amount: 15
+    target_customer_segments:
+      - "price_sensitive"
+      - "regular_customer"
+    min_days_since_visit: 21
+    max_days_since_visit: 120
+    start_date: "2024-01-01"
+    end_date: "2024-12-31"
+    max_uses: 100
+    is_active: true
+
+  - name: "Color Refresh Special"
+    description: "20% off all color services - time to refresh your look!"
+    discount_percentage: 20
+    target_customer_segments:
+      - "service_specific"
+      - "regular_customer"
+    target_services:
+      - "color"
+      - "highlights"
+    min_days_since_visit: 45
+    max_days_since_visit: 150
+    start_date: "2024-01-01"
+    end_date: "2024-12-31"
+    max_uses: 60
+    is_active: true
+
+  - name: "Quick Touch-Up Deal"
+    description: "10% off cuts and trims - keep your style fresh!"
+    discount_percentage: 10
+    target_customer_segments:
+      - "regular_customer"
+    target_services:
+      - "cut"
+      - "trim"
+    min_days_since_visit: 14
+    max_days_since_visit: 60
+    start_date: "2024-01-01"
+    end_date: "2024-12-31"
+    max_uses: 200
+    is_active: true
+
+  - name: "Holiday Special"
+    description: "Get ready for the holidays! 25% off styling services"
+    discount_percentage: 25
+    target_customer_segments:
+      - "regular_customer"
+      - "vip_customer"
+    target_services:
+      - "styling"
+      - "special_occasion"
+    min_days_since_visit: 7
+    max_days_since_visit: 90
+    start_date: "2024-11-01"
+    end_date: "2024-12-31"
+    max_uses: 40
+    is_active: true
+
+# Voice message templates for different promotion types
+voice_templates:
+  new_customer:
+    greeting: "Hi {customer_name}, this is TwistyVoice calling from {salon_name}. We'd love to welcome you to our salon family!"
+    offer: "As a new customer, we're offering you {discount}% off your first visit."
+    urgency: "This special offer is available for a limited time."
+    call_to_action: "Press 1 to book your appointment now, or press 2 for more information."
+
+  welcome_back:
+    greeting: "Hi {customer_name}, this is TwistyVoice from {salon_name}. We miss seeing you!"
+    offer: "We'd love to welcome you back with ${discount} off any service over $75."
+    urgency: "This welcome back offer won't last long."
+    call_to_action: "Press 1 to book your comeback appointment, or press 2 to hear more details."
+
+  service_specific:
+    greeting: "Hi {customer_name}, this is TwistyVoice from {salon_name}."
+    offer: "We have a special {discount}% off promotion on {service_type} services just for you!"
+    urgency: "This offer is only available this month."
+    call_to_action: "Press 1 to book now, or press 2 for more information about our services."
+
+  vip_exclusive:
+    greeting: "Hi {customer_name}, this is TwistyVoice from {salon_name}. As one of our VIP customers, you get exclusive access to special offers."
+    offer: "We're offering you an exclusive {discount}% off any service."
+    urgency: "This VIP offer is limited and expires soon."
+    call_to_action: "Press 1 to book your VIP appointment, or press 2 to learn more."
+
+# SMS templates for follow-up messages
+sms_templates:
+  promotional:
+    "Hi {customer_name}! {salon_name} here. Special offer: {discount_text} {promotion_name}. {description} Book now: {phone}. Reply STOP to opt out."
+  
+  booking_confirmation:
+    "Hi {customer_name}! Your {service} appointment at {salon_name} is confirmed for {date_time}. Address: {address}. Questions? Call {phone}."
+  
+  reminder:
+    "Hi {customer_name}! Reminder: You have a {service} appointment at {salon_name} on {date_time}. Address: {address}. Questions? Call {phone}."
+  
+  follow_up:
+    "Hi {customer_name}! Thanks for your interest in our {promotion_name} offer. Ready to book? Call {phone} or reply with your preferred time."
