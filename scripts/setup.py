@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import yaml
 import json
+import csv
 
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
@@ -67,80 +68,62 @@ def load_sample_promotions():
         db.close()
 
 
-def create_sample_customers():
-    """Create sample customers for testing."""
-    sample_customers = [
-        {
-            "square_customer_id": "sample_customer_1",
-            "first_name": "Alice",
-            "last_name": "Johnson",
-            "phone_number": "+15551234567",
-            "email": "alice.johnson@example.com",
-            "total_visits": 8,
-            "total_spent": 480.0,
-            "preferred_services": json.dumps(["braids", "styling"]),
-            "visit_frequency": "monthly"
-        },
-        {
-            "square_customer_id": "sample_customer_2", 
-            "first_name": "Maria",
-            "last_name": "Garcia",
-            "phone_number": "+15551234568",
-            "email": "maria.garcia@example.com",
-            "total_visits": 15,
-            "total_spent": 1200.0,
-            "preferred_services": json.dumps(["color", "cut"]),
-            "visit_frequency": "bi-weekly"
-        },
-        {
-            "square_customer_id": "sample_customer_3",
-            "first_name": "Sarah",
-            "last_name": "Williams",
-            "phone_number": "+15551234569",
-            "email": "sarah.williams@example.com",
-            "total_visits": 3,
-            "total_spent": 180.0,
-            "preferred_services": json.dumps(["cut", "styling"]),
-            "visit_frequency": "quarterly"
-        },
-        {
-            "square_customer_id": "sample_customer_4",
-            "first_name": "Jennifer",
-            "last_name": "Brown",
-            "phone_number": "+15551234570",
-            "email": "jennifer.brown@example.com",
-            "total_visits": 0,
-            "total_spent": 0.0,
-            "preferred_services": json.dumps([]),
-            "visit_frequency": "new"
-        }
-    ]
+def load_customers_from_csv():
+    """Load customers from CSV file."""
+    csv_file = Path(__file__).parent.parent / "data" / "customers.csv"
+    
+    if not csv_file.exists():
+        print(f"Customer CSV file not found: {csv_file}")
+        print("Please create a customers.csv file in the data/ directory with your customer data.")
+        print("See data/customers.csv for the expected format.")
+        return
     
     db = SessionLocal()
     
     try:
-        for customer_data in sample_customers:
-            # Check if customer already exists
-            existing = db.query(Customer).filter(
-                Customer.square_customer_id == customer_data['square_customer_id']
-            ).first()
+        with open(csv_file, 'r', newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
             
-            if existing:
-                print(f"Customer '{customer_data['first_name']} {customer_data['last_name']}' already exists, skipping...")
-                continue
-            
-            customer = Customer(**customer_data)
-            db.add(customer)
-            print(f"Added customer: {customer.first_name} {customer.last_name}")
+            for row in reader:
+                # Check if customer already exists by phone or email
+                existing = db.query(Customer).filter(
+                    (Customer.phone_number == row.get('phone_number')) |
+                    (Customer.email == row.get('email'))
+                ).first()
+                
+                if existing:
+                    print(f"Customer '{row['first_name']} {row['last_name']}' already exists, skipping...")
+                    continue
+                
+                # Prepare customer data
+                customer_data = {
+                    'first_name': row['first_name'],
+                    'last_name': row['last_name'],
+                    'phone_number': row.get('phone_number', ''),
+                    'email': row.get('email', ''),
+                    'total_visits': int(row.get('total_visits', 0)),
+                    'total_spent': float(row.get('total_spent', 0.0)),
+                    'visit_frequency': row.get('visit_frequency', 'monthly'),
+                    'preferred_stylist': row.get('preferred_stylist', ''),
+                    'preferred_services': json.dumps(row.get('preferred_services', '').split(',') if row.get('preferred_services') else []),
+                    'opt_out_calls': row.get('opt_out_calls', '').lower() == 'true',
+                    'opt_out_sms': row.get('opt_out_sms', '').lower() == 'true',
+                    'preferred_contact_time': row.get('preferred_contact_time', 'afternoon')
+                }
+                
+                customer = Customer(**customer_data)
+                db.add(customer)
+                print(f"Added customer: {customer.first_name} {customer.last_name}")
         
         db.commit()
-        print(f"Successfully created {len(sample_customers)} sample customers")
+        print("✅ Successfully loaded customers from CSV")
         
     except Exception as e:
-        print(f"Error creating sample customers: {e}")
+        print(f"Error loading customers from CSV: {e}")
         db.rollback()
     finally:
         db.close()
+
 
 
 def main():
@@ -161,16 +144,17 @@ def main():
     load_sample_promotions()
     print("✅ Sample promotions loaded")
     
-    # Create sample customers
-    print("Creating sample customers...")
-    create_sample_customers()
-    print("✅ Sample customers created")
+    # Load customers from CSV
+    print("Loading customers from CSV...")
+    load_customers_from_csv()
+    print("✅ Customers loaded from CSV")
     
     print("\n🎉 TwistyVoice setup completed successfully!")
     print("\nNext steps:")
     print("1. Copy .env.example to .env and configure your API keys")
-    print("2. Run: python -m src.main")
-    print("3. Visit http://localhost:8000/docs for API documentation")
+    print("2. Edit data/customers.csv to add your actual customer data")
+    print("3. Run: python -m src.main")
+    print("4. Visit http://localhost:8000/docs for API documentation")
     print("\nFor production deployment:")
     print("1. Configure your production environment variables")
     print("2. Run: docker-compose up -d")

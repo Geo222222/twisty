@@ -1,0 +1,2 @@
+id,first_name,last_name,phone_number,email,total_visits,total_spent,preferred_services,visit_frequency,preferred_stylist,opt_out_calls,opt_out_sms,preferred_contact_time
+1,DJ,Martin,+2566946682,djuvanemartin@gmail.com,8,480.00,"braids,styling",monthly,Tanya,false,false,afternoon

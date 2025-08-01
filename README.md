@@ -39,7 +39,7 @@ TwistyVoice is a modular system that autonomously:
 
 ```
 twisty/
-├── src/
+├── src/                         # Main application source code
 │   ├── core/                    # Core business logic
 │   │   ├── square_connector.py
 │   │   ├── promotion_engine.py
@@ -48,16 +48,28 @@ twisty/
 │   │   ├── conversation_tracker.py
 │   │   ├── report_generator.py
 │   │   └── scheduler.py
-│   ├── models/                  # Data models
-│   ├── api/                     # FastAPI routes
-│   ├── utils/                   # Utility functions
-│   └── config/                  # Configuration management
-├── tests/                       # Test suite
+│   ├── models/                  # Data models and database
+│   ├── api/                     # FastAPI routes and endpoints
+│   ├── utils/                   # Utility functions and helpers
+│   ├── config/                  # Configuration management
+│   └── main.py                  # Application entry point
+├── tests/                       # Comprehensive test suite
+│   ├── test_promotion_engine.py
+│   ├── test_back_to_school_campaign.py
+│   └── ...                     # Additional test files
+├── examples/                    # Example scripts and demos
+│   ├── send_promo_text.py
+│   ├── make_direct_call.py
+│   └── ...                     # Usage examples
+├── scripts/                     # Setup and utility scripts
+│   └── setup.py
 ├── data/                        # Data files (promotions, templates)
 ├── logs/                        # Application logs
 ├── docker/                      # Docker configuration
-├── scripts/                     # Deployment and utility scripts
-└── docs/                        # Documentation
+├── docs/                        # Documentation
+├── .env.example                 # Environment configuration template
+├── requirements.txt             # Python dependencies
+└── run_tests.py                 # Test runner
 ```
 
 ## Quick Start
@@ -75,8 +87,32 @@ twisty/
 
 3. **Run Development Server**
    ```bash
-   python -m src.main
+   python src/main.py
+   # Or alternatively
+   python run_main.py
    ```
+
+4. **Run Tests**
+   ```bash
+   python run_tests.py
+   # Or using pytest directly
+   python -m pytest tests/
+   ```
+
+5. **Explore Examples**
+   ```bash
+   # See examples directory for usage demos
+   python examples/send_promo_text.py
+   ```
+
+## Directory Guide
+
+- **`src/`**: Main application code - start here for development
+- **`tests/`**: All test files - run with `pytest` or `run_tests.py`
+- **`examples/`**: Demo scripts and usage examples
+- **`scripts/`**: Setup and utility scripts
+- **`data/`**: Configuration files and sample data
+- **`docs/`**: Additional documentation and deployment guides
 
 ## Security & Compliance
 

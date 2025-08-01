@@ -14,7 +14,7 @@ from typing import Dict, List, Optional, Tuple
 
 from sqlalchemy.orm import Session
 
-from core.square_connector import SquareConnector
+from core.csv_data_connector import CSVDataConnector
 from core.voice_agent import VoiceAgent
 from models.database import Customer, Booking, Conversation
 from config.settings import get_settings
@@ -46,7 +46,7 @@ class BookingHandler:
     
     def __init__(self, db: Session):
         self.db = db
-        self.square_connector = SquareConnector()
+        self.data_connector = CSVDataConnector()
         self.voice_agent = VoiceAgent()
     
     async def get_available_slots(
@@ -70,7 +70,7 @@ class BookingHandler:
         """
         try:
             # Get existing bookings from Square
-            existing_bookings = await self.square_connector.get_bookings(
+            existing_bookings = await self.data_connector.get_bookings(
                 start_at=start_date,
                 end_at=end_date
             )
@@ -205,7 +205,7 @@ class BookingHandler:
         """
         try:
             # Create booking in Square
-            square_booking_id = await self.square_connector.create_booking(
+            booking_id = await self.data_connector.create_booking(
                 customer_id=customer.square_customer_id,
                 service_id=service_id,
                 start_time=start_time,
@@ -213,12 +213,12 @@ class BookingHandler:
                 team_member_id=stylist_id
             )
             
-            if not square_booking_id:
+            if not booking_id:
                 logger.error("Failed to create booking in Square")
                 return None
             
             # Get service details
-            services = await self.square_connector.get_catalog_services()
+            services = await self.data_connector.get_catalog_services()
             service_name = "Hair Service"  # Default
             service_price = 0.0
             
@@ -233,10 +233,10 @@ class BookingHandler:
             booking = Booking(
                 customer_id=customer.id,
                 conversation_id=conversation_id,
-                square_booking_id=square_booking_id,
+                external_booking_id=booking_id,
                 appointment_datetime=start_time,
                 service_name=service_name,
-                stylist_name="",  # TODO: Get stylist name from Square
+                stylist_name="",  # TODO: Get stylist name from CSV
                 duration_minutes=duration_minutes,
                 price=service_price,
                 status="confirmed",
@@ -454,4 +454,4 @@ class BookingHandler:
     
     async def close(self):
         """Close connections."""
-        await self.square_connector.close()
+        await self.data_connector.close()

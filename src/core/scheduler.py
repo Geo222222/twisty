@@ -19,7 +19,7 @@ from apscheduler.triggers.date import DateTrigger
 from sqlalchemy.orm import Session
 
 from models.database import get_db, Customer, Promotion, CallCampaign, Conversation
-from core.square_connector import SquareConnector
+from core.csv_data_connector import CSVDataConnector
 from core.promotion_engine import PromotionEngine
 from core.voice_agent import VoiceAgent
 from core.booking_handler import BookingHandler

@@ -221,7 +221,7 @@ $RECYCLE.BIN/
 # Local data files
 data/local/
 data/temp/
-data/*.csv
+# data/*.csv  # Uncomment to ignore CSV files
 data/*.json
 data/*.xml
 

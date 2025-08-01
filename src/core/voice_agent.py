@@ -13,7 +13,7 @@ from datetime import datetime
 from typing import Dict, Optional
 
 from twilio.rest import Client
-from twilio.twiml import VoiceResponse
+from twilio.twiml.voice_response import VoiceResponse
 import httpx
 
 from config.settings import get_settings

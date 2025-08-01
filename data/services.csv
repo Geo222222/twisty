@@ -1,0 +1,6 @@
+id,name,description,duration_minutes,price,category
+svc_001,Haircut & Style,Professional cut and styling,60,65.00,cut
+svc_002,Color Treatment,Full color treatment and styling,120,120.00,color
+svc_003,Braids,Various braiding styles,180,85.00,braids
+svc_004,Deep Conditioning,Intensive hair treatment,45,45.00,treatment
+svc_005,Wash & Set,"Wash, condition, and style",90,55.00,styling

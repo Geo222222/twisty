@@ -7,8 +7,28 @@ from datetime import datetime, timedelta
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from models.database import Base, Customer, Promotion
-from core.promotion_engine import PromotionEngine, CustomerSegment
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+
+# Mock the settings to avoid validation errors
+import unittest.mock
+with unittest.mock.patch.dict(os.environ, {
+    'SQUARE_APPLICATION_ID': 'test',
+    'SQUARE_ACCESS_TOKEN': 'test',
+    'TWILIO_ACCOUNT_SID': 'test',
+    'TWILIO_AUTH_TOKEN': 'test',
+    'TWILIO_PHONE_NUMBER': 'test',
+    'SMTP_USERNAME': 'test',
+    'SMTP_PASSWORD': 'test',
+    'MANAGER_EMAIL': 'test@test.com',
+    'SALON_PHONE': 'test',
+    'SALON_ADDRESS': 'test',
+    'SECRET_KEY': 'test',
+    'ENCRYPTION_KEY': 'test' * 4  # 32 characters
+}):
+    from models.database import Base, Customer, Promotion
+    from core.promotion_engine import PromotionEngine, CustomerSegment
 
 
 @pytest.fixture
@@ -26,7 +46,6 @@ def db_session():
 def sample_customer(db_session):
     """Create a sample customer for testing."""
     customer = Customer(
-        square_customer_id="test_customer_123",
         first_name="Jane",
         last_name="Doe",
         phone_number="+1234567890",
@@ -103,7 +122,6 @@ def test_customer_eligibility_days_since_visit(db_session):
     """Test customer eligibility based on days since last visit."""
     # Create customer with recent visit (should not be eligible)
     recent_customer = Customer(
-        square_customer_id="recent_customer",
         first_name="Recent",
         last_name="Customer",
         phone_number="+1111111111",
@@ -133,7 +151,6 @@ def test_customer_eligibility_days_since_visit(db_session):
 def test_new_customer_segment():
     """Test new customer segment identification."""
     new_customer = Customer(
-        square_customer_id="new_customer",
         first_name="New",
         last_name="Customer",
         total_visits=0,
@@ -153,7 +170,6 @@ def test_new_customer_segment():
 def test_vip_customer_segment():
     """Test VIP customer segment identification."""
     vip_customer = Customer(
-        square_customer_id="vip_customer",
         first_name="VIP",
         last_name="Customer",
         total_visits=25,
@@ -173,10 +189,10 @@ def test_vip_customer_segment():
 def test_lapsed_customer_segment():
     """Test lapsed customer segment identification."""
     lapsed_customer = Customer(
-        square_customer_id="lapsed_customer",
         first_name="Lapsed",
         last_name="Customer",
         total_visits=8,
+        total_spent=400.0,
         last_visit_date=datetime.utcnow() - timedelta(days=120)
     )
     

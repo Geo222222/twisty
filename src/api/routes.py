@@ -31,10 +31,7 @@ webhooks_router = APIRouter(prefix="/webhooks", tags=["webhooks"])
 twiml_router = APIRouter(prefix="/twiml", tags=["twiml"])
 admin_router = APIRouter(prefix="/admin", tags=["admin"])
 
-# Include sub-routers in main router
-api_router.include_router(webhooks_router)
-api_router.include_router(twiml_router)
-api_router.include_router(admin_router)
+# Note: include_router calls moved to end of file after all routes are defined
 
 
 # Webhook endpoints for Twilio
@@ -189,7 +186,9 @@ async def generate_promotional_twiml(
         
     except Exception as e:
         logger.error(f"Error generating promotional TwiML: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        import traceback
+        logger.error(f"TwiML error traceback: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
 # Admin endpoints
@@ -298,7 +297,9 @@ async def start_promotional_campaign(
         
     except Exception as e:
         logger.error(f"Error starting campaign: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        import traceback
+        logger.error(f"Campaign error traceback: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
 @admin_router.get("/bookings")
@@ -390,3 +391,9 @@ async def _handle_booking_request(conversation: Conversation, db: Session):
         
     except Exception as e:
         logger.error(f"Error handling booking request: {e}")
+
+
+# Include sub-routers in main router (after all routes are defined)
+api_router.include_router(webhooks_router)
+api_router.include_router(twiml_router)
+api_router.include_router(admin_router)

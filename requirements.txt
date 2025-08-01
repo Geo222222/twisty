@@ -7,7 +7,7 @@ pydantic-settings==2.1.0
 # Database
 sqlalchemy==2.0.23
 alembic==1.13.1
-sqlite3  # Built-in with Python
+# sqlite3 is built-in with Python
 
 # HTTP Client
 httpx==0.25.2
@@ -22,7 +22,7 @@ apscheduler==3.10.4
 
 # Email & Reporting
 jinja2==3.1.2
-smtplib  # Built-in with Python
+# smtplib is built-in with Python
 pandas==2.1.4
 openpyxl==3.1.2
 
@@ -35,7 +35,7 @@ structlog==23.2.0
 rich==13.7.0
 
 # Security
-cryptography==41.0.8
+cryptography>=3.4.8
 passlib[bcrypt]==1.7.4
 python-jose[cryptography]==3.3.0
 

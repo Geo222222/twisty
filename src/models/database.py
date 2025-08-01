@@ -32,12 +32,11 @@ Base = declarative_base()
 
 
 class Customer(Base):
-    """Customer model representing Square customers."""
+    """Customer model representing salon customers."""
     
     __tablename__ = "customers"
     
     id = Column(Integer, primary_key=True, index=True)
-    square_customer_id = Column(String, unique=True, index=True)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     phone_number = Column(String, index=True)
@@ -136,8 +135,8 @@ class Booking(Base):
     customer_id = Column(Integer, ForeignKey("customers.id"))
     conversation_id = Column(Integer, ForeignKey("conversations.id"), nullable=True)
     
-    # Square booking details
-    square_booking_id = Column(String, unique=True, index=True)
+    # External booking details
+    external_booking_id = Column(String, unique=True, index=True)
     appointment_datetime = Column(DateTime)
     service_name = Column(String)
     stylist_name = Column(String)
@@ -146,7 +145,7 @@ class Booking(Base):
     
     # Booking status
     status = Column(String)  # confirmed, cancelled, completed, no_show
-    created_via = Column(String)  # voice_call, sms, manual, square_app
+    created_via = Column(String)  # voice_call, sms, manual, csv_import
     
     # Metadata
     created_at = Column(DateTime, default=datetime.utcnow)
