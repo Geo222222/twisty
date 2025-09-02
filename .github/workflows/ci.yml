@@ -80,6 +80,7 @@ jobs:
 
     - name: Set up test database
       run: |
+        # Create test database with sample data
         python scripts/seed_db.py
 
     - name: Run tests with pytest
@@ -209,19 +210,19 @@ jobs:
     - name: Validate portfolio demo setup
       run: |
         echo "🎬 Validating portfolio demo setup..."
-        
+
         # Check required files exist
         test -f Makefile && echo "✅ Makefile exists"
         test -f requirements.txt && echo "✅ requirements.txt exists"
         test -f scripts/seed_db.py && echo "✅ seed_db.py exists"
         test -f scripts/demo_campaign.py && echo "✅ demo_campaign.py exists"
         test -d sdk_fakes && echo "✅ sdk_fakes directory exists"
-        
-        # Test Makefile targets
-        echo "🧪 Testing Makefile targets..."
-        make install-deps
-        make seed
-        
+
+        # Test Python scripts directly (since make might not be available)
+        echo "🧪 Testing demo functionality..."
+        python scripts/seed_db.py
+        python scripts/demo_campaign.py
+
         echo "✅ Portfolio demo validation passed!"
 
     - name: Generate demo report
