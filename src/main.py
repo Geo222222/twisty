@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 # Add src to Python path for imports
@@ -35,6 +35,16 @@ app = FastAPI(
     docs_url="/docs" if settings.DEBUG else None,
     redoc_url="/redoc" if settings.DEBUG else None,
 )
+
+# Add tenant middleware for demo
+@app.middleware("http")
+async def add_tenant_middleware(request: Request, call_next):
+    """Add default tenant for demo purposes."""
+    # Set default tenant for demo
+    request.state.tenant_id = 1
+    request.state.tenant_slug = "gettwisted"
+    response = await call_next(request)
+    return response
 
 # Add CORS middleware
 app.add_middleware(
